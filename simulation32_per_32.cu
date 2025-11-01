@@ -41,7 +41,7 @@ void fill_random(int *tab, int size){
     srand(time(NULL));
     for(int i = 0; i < size; i++){
         tab[i] = rand() % 2;
-    }
+    }    
 }
 
 void simulation(int *vec, int *res, int nb_sim){
@@ -58,10 +58,21 @@ void simulation(int *vec, int *res, int nb_sim){
 }
 
 
+void four_o_center(int *tab, int size){
+    for(int i = 0; i < size; i++){
+        tab[i] = 1;
+    }
+    tab[15 * DIM + 15] = 0;
+    tab[15 * DIM + 16] = 0;
+    tab[16 * DIM + 15] = 0;
+    tab[16 * DIM + 16] = 0;
+}
+
+
 int main(){
     int tab[SIZE];
     int res[SIZE];
-    fill_random(tab, SIZE);
+    four_o_center(tab, SIZE);
 
     printf("AU DEBUT:\n");
     for (int i = 0; i < SIZE; i++) {
