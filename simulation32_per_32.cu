@@ -105,10 +105,54 @@ void blinker(int *tab, int size){
 }
 
 
+void glider(int *tab, int size){
+    for(int i = 0; i < size; i++){
+        tab[i] = 0;
+    }
+
+    //sup_gauche
+    tab[0 * DIM + 1] = 1;
+    tab[1 * DIM + 2] = 1;
+    tab[2 * DIM + 2] = 1;
+    tab[2 * DIM + 1] = 1;
+    tab[2 * DIM + 0] = 1;
+
+    //sup_droit
+    tab[0 * DIM + 30] = 1;
+    tab[1 * DIM + 29] = 1;
+    tab[2 * DIM + 30] = 1;
+    tab[2 * DIM + 29] = 1;
+    tab[2 * DIM + 28] = 1;
+
+    //inf gauche
+    tab[27 * DIM + 1] = 1;
+    tab[27 * DIM + 2] = 1;
+    tab[27 * DIM + 3] = 1;
+    tab[27 * DIM + 4] = 1;
+    tab[28 * DIM + 0] = 1;
+    tab[28 * DIM + 4] = 1;
+    tab[29 * DIM + 4] = 1;
+    tab[30 * DIM + 0] = 1;
+    tab[30 * DIM + 3] = 1;
+
+    //inf_droit
+    tab[27 * DIM + 31] = 1;
+    tab[27 * DIM + 30] = 1;
+    tab[27 * DIM + 29] = 1;
+    tab[27 * DIM + 28] = 1;
+    tab[28 * DIM + 31] = 1;
+    tab[28 * DIM + 27] = 1;
+    tab[29 * DIM + 31] = 1;
+    tab[30 * DIM + 30] = 1;
+    tab[30 * DIM + 27] = 1;
+
+}
+
+
 int main(){
     int tab[SIZE];
     int res[SIZE];
-    blinker(tab, SIZE);
+    glider(tab, SIZE);
 
     printf("AU DEBUT:\n");
     for (int i = 0; i < SIZE; i++) {
