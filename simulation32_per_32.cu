@@ -68,11 +68,47 @@ void four_o_center(int *tab, int size){
     tab[16 * DIM + 16] = 0;
 }
 
+void blinker(int *tab, int size){
+    for(int i = 0; i < size; i++){
+        tab[i] = 0;
+    }
+    //sup_gauche
+    tab[1 * DIM + 1] = 1;
+    tab[1 * DIM + 2] = 1;
+    tab[1 * DIM + 3] = 1;
+
+    //sup_droit
+    tab[1 * DIM + 30] = 1;
+    tab[1 * DIM + 29] = 1;
+    tab[1 * DIM + 28] = 1;
+
+    //inf_gauche
+    tab[27 * DIM + 1] = 1;
+    tab[28 * DIM + 1] = 1;
+    tab[29 * DIM + 1] = 1;
+
+    //inf_gauche
+    tab[27 * DIM + 29] = 1;
+    tab[28 * DIM + 29] = 1;
+    tab[29 * DIM + 29] = 1;
+
+    //l14
+    tab[13 * DIM + 1] = 1;
+    tab[13 * DIM + 2] = 1;
+    tab[13 * DIM + 3] = 1;
+
+    //l15
+    tab[14 * DIM + 1] = 1;
+    tab[14 * DIM + 2] = 1;
+    tab[14 * DIM + 0] = 1;
+    
+}
+
 
 int main(){
     int tab[SIZE];
     int res[SIZE];
-    four_o_center(tab, SIZE);
+    blinker(tab, SIZE);
 
     printf("AU DEBUT:\n");
     for (int i = 0; i < SIZE; i++) {
