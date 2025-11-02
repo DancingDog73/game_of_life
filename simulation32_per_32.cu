@@ -5,6 +5,17 @@
 #define SIZE 1024
 
 
+__device__ void display(int *vec, int it){
+    printf("\033[H\033[J");
+    printf("GRILLE A LA FIN DE  L'ITERATION NUMERO %d\n", it+1);
+    for (int i = 0; i < SIZE; i++) {
+        printf("%d ", vec[i]);
+        if((i+1)%32 == 0){
+            printf("\n");
+        }
+    }
+}
+
 __global__ void ksimulation(int *vec, int nb_sim){
     int idx = threadIdx.y*blockDim.y + threadIdx.x;
     int x = threadIdx.x;
@@ -34,8 +45,20 @@ __global__ void ksimulation(int *vec, int nb_sim){
     __syncthreads();
         vec[idx] = next_value;
     __syncthreads();
+        if(idx == 0){
+            printf("GRILLE A LA FIN DE  L'ITERATION NUMERO %d\n", n+1);
+            for (int i = 0; i < SIZE; i++) {
+                printf("%d ", vec[i]);
+                if((i+1)%32 == 0){
+                    printf("\n");
+                }
+            }
+        }
+    __syncthreads();
     }
 }
+
+
 
 void fill_random(int *tab, int size){
     srand(time(NULL));
@@ -187,15 +210,9 @@ int main(){
         }
     }
 
-    simulation(tab, res, 1);    
+    simulation(tab, res, 20);    
 
-    printf("A LA FIN:\n");
-    for (int i = 0; i < SIZE; i++) {
-        printf("%d ", res[i]);
-        if((i+1)%32 == 0){
-            printf("\n");
-        }
-    }
+   
 
     return 0;
 }
