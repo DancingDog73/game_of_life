@@ -9,7 +9,7 @@ void affichage(std::vector<int>& tab, int length, int width){
     std::cout << "Nouvelle sim:\n";
     for(int i = 0; i < length; i++){
         for(int j = 0; j < width; j++){
-            std::cout << (tab[i+j] & 1) << " ";
+            std::cout << tab[i+j]  << " ";
         }
         std::cout << std::endl;
     }
@@ -39,11 +39,12 @@ void fill_random(std::vector<int>& tab, int nb_ones){
 
 void simulation(int length, int width, int nb_simulations){
     int nb_elt = length * width;
-    std::vector<int> tab = std::vector (nb_elt, 0);
+    std::vector<int> grille_actuelle = std::vector(nb_elt, 0);
+    std::vector<int> grille_future = std::vector(nb_elt, 0);
 
-    fill_random(tab, 512);
+    fill_random(grille_actuelle, 512);
 
-    affichage(tab, length, width);
+    affichage(grille_actuelle, length, width);
 
     for(int n=0; n<nb_simulations; n++){
         
@@ -58,32 +59,27 @@ void simulation(int length, int width, int nb_simulations){
                         int neighbor_x = x+j;
                         int neighbor_y = y+k;
                         if((neighbor_x>=0 && neighbor_x<width) && (neighbor_y>=0 && neighbor_y<length)){
-                            somme += (tab[neighbor_y*width + neighbor_x] &1);
+                            somme += grille_actuelle[neighbor_y*width + neighbor_x];
                         }
                     }
                 }
             }
 
             int next_value;
-            if(tab[i] == 1 && (somme == 2 || somme == 3)){
-                next_value = 1;
+            if(grille_actuelle[i] == 1 && (somme == 2 || somme == 3)){
+                grille_future[i] = 1;
             }
-            else if(tab[i] == 0  && somme == 3 ){
-                next_value = 1;
+            else if(grille_actuelle[i] == 0  && somme == 3 ){
+                grille_future[i] = 1;
             } else {
-                next_value = 0;
-            }
-            if(next_value == 1){
-                tab[i] |= 2;
+                grille_future[i] = 0;
             }
             
         }
 
-        for(int i = 0; i < nb_elt; i++){
-            tab[i] >>= 1;
-        }
+        std::swap(grille_actuelle, grille_future);
         
-        affichage(tab, length, width);
+        affichage(grille_actuelle, length, width);
     }
 
     
