@@ -6,6 +6,7 @@
 
 
 void affichage(std::vector<int>& tab, int width){
+    //fprintf(stdout, "\033[2J");
     std::cout << "Nouvelle sim:\n";
     int w_count = 1;
     for(int a: tab){
@@ -41,6 +42,25 @@ void fill_random(std::vector<int>& tab, int nb_ones){
     
 }
 
+void add_random_blinker(std::vector<int>& tab, int length, int width){
+     if(length < 3 || width < 3){
+        return;
+    }
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> distr(0, length - 3);
+    int l = distr(gen);
+    std::uniform_int_distribution<> distr1(1, width - 2);
+    int w = distr1(gen);
+
+
+    tab[l * width + (w)] = 1;
+    tab[(l+1) * width + (w)] = 1;
+    tab[(l+2) * width + (w)] = 1;
+
+
+}
+
 
 void add_random_glider(std::vector<int>& tab, int length, int width){
     if(length < 3 || width < 3){
@@ -52,12 +72,6 @@ void add_random_glider(std::vector<int>& tab, int length, int width){
     int l = distr(gen);
     std::uniform_int_distribution<> distr1(1, width - 2);
     int w = distr1(gen);
-    
-
-    int num = l*w;
-    std::cout << num <<std::endl;
-
-    
     
     tab[l * width + (w)] = 1;
     
@@ -75,7 +89,7 @@ void simulation(int length, int width, int nb_simulations){
     std::vector<int> grille_future = std::vector(nb_elt, 0);
 
     //fill_random(grille_actuelle, nb_elt/2);
-    add_random_glider(grille_actuelle, length, width);
+    add_random_blinker(grille_actuelle, length, width);
 
     affichage(grille_actuelle, width);
 
@@ -129,5 +143,6 @@ int main(){
     affichage(grille_actuelle, width);*/
 
     simulation(32, 32, 3);
+
     
 }
