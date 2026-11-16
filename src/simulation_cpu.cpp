@@ -3,9 +3,10 @@
 #include <random>
 #include <algorithm>
 #include <numeric>
+#include <string>
 
 
-void affichage(std::vector<int>& tab, int width){
+void display(std::vector<int>& tab, int width){
     fprintf(stdout, "\033[2J");
     std::cout << "Nouvelle sim:\n";
     int w_count = 1;
@@ -42,17 +43,16 @@ void fill_random(std::vector<int>& tab, int nb_ones){
     
 }
 
-void add_random_blinker(std::vector<int>& tab, int length, int width){
-     if(length < 3 || width < 3){
+void add_random_blinker(std::vector<int>& tab, int height, int width){
+     if(height < 3 || width < 3){
         return;
     }
     std::random_device rd;
     std::mt19937 gen(rd());
-    std::uniform_int_distribution<> distr(0, length - 3);
+    std::uniform_int_distribution<> distr(0, height - 3);
     int l = distr(gen);
-    /*std::uniform_int_distribution<> distr1(1, width - 2);
-    int w = distr1(gen);*/
-    int w = width - 1;
+    std::uniform_int_distribution<> distr1(1, width - 2);
+    int w = distr1(gen);
 
 
     tab[l * width + (w)] = 1;
@@ -63,13 +63,13 @@ void add_random_blinker(std::vector<int>& tab, int length, int width){
 }
 
 
-void add_random_glider(std::vector<int>& tab, int length, int width){
-    if(length < 3 || width < 3){
+void add_random_glider(std::vector<int>& tab, int height, int width){
+    if(height < 3 || width < 3){
         return;
     }
     std::random_device rd;
     std::mt19937 gen(rd());
-    std::uniform_int_distribution<> distr(0, length - 3);
+    std::uniform_int_distribution<> distr(0, height - 3);
     int l = distr(gen);
     std::uniform_int_distribution<> distr1(1, width - 2);
     int w = distr1(gen);
@@ -84,15 +84,15 @@ void add_random_glider(std::vector<int>& tab, int length, int width){
 }
 
 
-void simulation(int length, int width, int nb_simulations){
-    int nb_elt = length * width;
+void simulation(int height, int width, int nb_simulations){
+    int nb_elt = height * width;
     std::vector<int> grille_actuelle = std::vector(nb_elt, 0);
     std::vector<int> grille_future = std::vector(nb_elt, 0);
 
     //fill_random(grille_actuelle, nb_elt/2);
-    add_random_blinker(grille_actuelle, length, width);
+    add_random_glider(grille_actuelle, height, width);
 
-    affichage(grille_actuelle, width);
+    display(grille_actuelle, width);
 
     for(int n=0; n<nb_simulations; n++){
         
@@ -105,8 +105,8 @@ void simulation(int length, int width, int nb_simulations){
                 for(int k=-1; k < 2; k++){
                     if(!(j == 0 && k==0)){
                         int neighbor_x = (x+k+width)%width;
-                        int neighbor_y = (y+j+length)%length;
-                        if((neighbor_x>=0 && neighbor_x<width) && (neighbor_y>=0 && neighbor_y<length)){
+                        int neighbor_y = (y+j+height)%height;
+                        if((neighbor_x>=0 && neighbor_x<width) && (neighbor_y>=0 && neighbor_y<height)){
                             somme += grille_actuelle[neighbor_y*width + neighbor_x];
                         }
                     }
@@ -127,23 +127,23 @@ void simulation(int length, int width, int nb_simulations){
 
         std::swap(grille_actuelle, grille_future);
         
-        affichage(grille_actuelle, width);
+        display(grille_actuelle, width);
     }
 
     
     
 }
 
-int main(){
+int main(int argc, char* argv[]){
 
-    /*int length = 32;
-    int width = 32;
-    int nb_elt = length * width;
-    std::vector<int> grille_actuelle = std::vector(nb_elt, 0);
-    add_random_glider(grille_actuelle, length, width);
-    affichage(grille_actuelle, width);*/
+    if(argc < 4){
+        std::cerr << "Usage " << argv[0] << " <height> <width> <number_of_simulation>\n";
+    }
 
-    simulation(32, 32, 50);
+    int height = std::stoi(argv[1]);
+    int width = std::stoi(argv[2]);
+    int nb_sim = std::stoi(argv[3]);
+    simulation(height, width, nb_sim);
 
     
 }
