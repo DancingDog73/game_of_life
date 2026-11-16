@@ -8,6 +8,8 @@
 #include <cuda_runtime.h>
 #include <cstdio>
 #include <cstdlib>
+#include <numeric>
+
 
 #define cudaCheckError(call)                                                       \
     do {                                                                       \
@@ -68,6 +70,10 @@ __global__ void ksimulation(int *vec, int* d_res, int nb_sim){
     }
     d_res[idx] = next_value;
     
+}
+
+int alive_cell(int *tab, int size){
+    return std::accumulate(tab, tab+size, 1);
 }
 
 void fill_zero(int* tab, int size){

@@ -22,6 +22,10 @@ void display(std::vector<int>& tab, int width){
     std::cin.ignore();
 }
 
+int alive_cell(std::vector<int>& tab, int size){
+    return std::accumulate(tab.begin(), tab.end(), 1);
+}
+
 void fill_random(std::vector<int>& tab, int density){
     int nb_ones = static_cast<float>(tab.size()*density)/100.0;
     if(nb_ones > tab.size()){nb_ones = tab.size();}
