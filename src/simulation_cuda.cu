@@ -5,6 +5,19 @@
 #include <string>
 #include <utility>
 #include <random>
+#include <cuda_runtime.h>
+#include <cstdio>
+#include <cstdlib>
+
+#define cudaCheckError(call)                                                       \
+    do {                                                                       \
+        cudaError_t err = (call);                                              \
+        if (err != cudaSuccess) {                                              \
+            fprintf(stderr, "CUDA Error at %s:%d — %s: %s\n",                  \
+                    __FILE__, __LINE__, #call, cudaGetErrorString(err));       \
+            exit(EXIT_FAILURE);                                                \
+        }                                                                      \
+    } while (0)
 
 
 
@@ -145,13 +158,13 @@ void simulation(int height, int width, int nb_sim){
     fill_zero(vec, size);
     add_random_glider(vec, height, width);
 
-    cudaMalloc((void **) &d_vec, bytes);
-    cudaMalloc((void **) &d_res, bytes);
-    cudaMemcpy(d_vec, vec, bytes, cudaMemcpyHostToDevice);
+    cudaCheckError(cudaMalloc((void **) &d_vec, bytes));
+    cudaCheckError(cudaMalloc((void **) &d_res, bytes));
+    cudaCheckError(cudaMemcpy(d_vec, vec, bytes, cudaMemcpyHostToDevice));
     for(int i=0; i < nb_sim; i++){
         
         ksimulation<<<1, bdim>>>(d_vec, d_res, nb_sim);
-        cudaMemcpy(res, d_res, bytes, cudaMemcpyDeviceToHost);
+        cudaCheckError(cudaMemcpy(res, d_res, bytes, cudaMemcpyDeviceToHost));
         std::swap(d_vec, d_res);
         display(res, height, width);
 
@@ -159,8 +172,8 @@ void simulation(int height, int width, int nb_sim){
     
     delete[] vec;
     delete[] res;
-    cudaFree(d_vec);
-    cudaFree(d_res);
+    cudaCheckError(cudaFree(d_vec));
+    cudaCheckError(cudaFree(d_res));
 
 }
 
