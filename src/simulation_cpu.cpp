@@ -6,7 +6,7 @@
 
 
 void affichage(std::vector<int>& tab, int width){
-    //fprintf(stdout, "\033[2J");
+    fprintf(stdout, "\033[2J");
     std::cout << "Nouvelle sim:\n";
     int w_count = 1;
     for(int a: tab){
@@ -50,8 +50,9 @@ void add_random_blinker(std::vector<int>& tab, int length, int width){
     std::mt19937 gen(rd());
     std::uniform_int_distribution<> distr(0, length - 3);
     int l = distr(gen);
-    std::uniform_int_distribution<> distr1(1, width - 2);
-    int w = distr1(gen);
+    /*std::uniform_int_distribution<> distr1(1, width - 2);
+    int w = distr1(gen);*/
+    int w = width - 1;
 
 
     tab[l * width + (w)] = 1;
@@ -103,8 +104,8 @@ void simulation(int length, int width, int nb_simulations){
             for(int j=-1; j < 2; j++){
                 for(int k=-1; k < 2; k++){
                     if(!(j == 0 && k==0)){
-                        int neighbor_x = x+k;
-                        int neighbor_y = y+j;
+                        int neighbor_x = (x+k+width)%width;
+                        int neighbor_y = (y+j+length)%length;
                         if((neighbor_x>=0 && neighbor_x<width) && (neighbor_y>=0 && neighbor_y<length)){
                             somme += grille_actuelle[neighbor_y*width + neighbor_x];
                         }
@@ -142,7 +143,7 @@ int main(){
     add_random_glider(grille_actuelle, length, width);
     affichage(grille_actuelle, width);*/
 
-    simulation(32, 32, 3);
+    simulation(32, 32, 50);
 
     
 }
