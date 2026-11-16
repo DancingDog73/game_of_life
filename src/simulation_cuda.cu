@@ -4,6 +4,8 @@
 #include <iostream>
 #include <string>
 #include <utility>
+#include <random>
+
 
 
 
@@ -55,6 +57,74 @@ __global__ void ksimulation(int *vec, int* d_res, int nb_sim){
     
 }
 
+void fill_zero(int* tab, int size){
+    for(int i=0; i < size; i++){
+        tab[i]=0;
+    }
+}
+
+void fill_random(int* tab, int size, int nb_ones){
+
+    if(nb_ones > size){nb_ones = size;}
+
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    
+    int ones_placed = 0;
+    while(ones_placed < nb_ones){
+        std::uniform_int_distribution<> distr(0, size - 1);
+        int r = distr(gen);
+
+        if (tab[r] == 0) {
+            tab[r] = 1;
+            ones_placed++;
+        }
+    }
+
+    
+}
+
+void add_random_blinker(int* tab, int height, int width){
+     if(height < 3 || width < 3){
+        return;
+    }
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> distr(0, height - 3);
+    int l = distr(gen);
+    std::uniform_int_distribution<> distr1(1, width - 2);
+    int w = distr1(gen);
+
+
+    tab[l * width + (w)] = 1;
+    tab[(l+1) * width + (w)] = 1;
+    tab[(l+2) * width + (w)] = 1;
+
+
+}
+
+
+void add_random_glider(int* tab, int height, int width){
+    if(height < 3 || width < 3){
+        return;
+    }
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> distr(0, height - 3);
+    int l = distr(gen);
+    std::uniform_int_distribution<> distr1(1, width - 2);
+    int w = distr1(gen);
+    
+    tab[l * width + (w)] = 1;
+    
+    
+    tab[(l+1)* width + (w+1)] = 1;
+    tab[(l+2)* width + (w-1)] = 1;
+    tab[(l+2)* width + (w)] = 1;
+    tab[(l+2)* width + (w+1)] = 1;
+}
+
+
 
 void fill_random(int *tab, int size){
     srand(time(NULL));
@@ -71,6 +141,9 @@ void simulation(int height, int width, int nb_sim){
     int *d_res;
     int bytes = size * sizeof(int);
     dim3 bdim(width, height,1);
+
+    fill_zero(vec, size);
+    add_random_glider(vec, height, width);
 
     cudaMalloc((void **) &d_vec, bytes);
     cudaMalloc((void **) &d_res, bytes);
