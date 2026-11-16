@@ -6,9 +6,16 @@
 #include <numeric>
 #include <string>
 
+inline int alive_cell(int *tab, int size){
+    return std::accumulate(tab, tab+size, 1);
+}
+
+
 inline void display(int* tab, int height, int width){
+
     fprintf(stdout, "\033[2J");
     std::cout << "Nouvelle sim:\n";
+    std::cout << "Il y a " << alive_cell(tab, height*width) << " cellules vivantes sur la grille\n";
     int w_count = 1;
     for(int i=0; i < height*width; i++){
         std::cout << tab[i]; 
@@ -24,9 +31,6 @@ inline void display(int* tab, int height, int width){
 
 
 
-inline int alive_cell(int *tab, int size){
-    return std::accumulate(tab, tab+size, 1);
-}
 
 inline void fill_zero(int* tab, int size){
     for(int i=0; i < size; i++){
@@ -95,10 +99,14 @@ inline void add_random_glider(int* tab, int height, int width){
     tab[(l+2)* width + (w+1)] = 1;
 }
 
+inline int alive_cell(std::vector<int>& tab){
+    return std::accumulate(tab.begin(), tab.end(), 1);
+}
 
 inline void display(std::vector<int>& tab, int width){
     fprintf(stdout, "\033[2J");
     std::cout << "Nouvelle sim:\n";
+    std::cout << "Il y a " << alive_cell(tab) << " cellules vivantes sur la grille\n";
     int w_count = 1;
     for(int a: tab){
         std::cout << a; 
@@ -112,9 +120,7 @@ inline void display(std::vector<int>& tab, int width){
     std::cin.ignore();
 }
 
-inline int alive_cell(std::vector<int>& tab, int size){
-    return std::accumulate(tab.begin(), tab.end(), 1);
-}
+
 
 inline void fill_random(std::vector<int>& tab, int density){
     int nb_ones = static_cast<float>(tab.size()*density)/100.0;

@@ -38,7 +38,6 @@ void simulation(int height, int width, int nb_simulations){
                 }
             }
 
-            int next_value;
             if(grille_actuelle[i] == 1 && (somme == 2 || somme == 3)){
                 grille_future[i] = 1;
             }

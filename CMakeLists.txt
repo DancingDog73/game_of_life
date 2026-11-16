@@ -16,8 +16,13 @@ set(SIMULATION_CUDA
     src/simulation_cuda.cu
 )
 
+set(SIMULATION_BOTH
+    src/simulation_both_mode.cu
+)
+
 add_executable(sim_cpu ${SIMULATION_CPU})
 add_executable(sim_cuda ${SIMULATION_CUDA})
+add_executable(sim_both ${SIMULATION_BOTH})
 
 
 set_target_properties(sim_cuda PROPERTIES CUDA_RESOLVE_DEVICE_SYMBOLS ON)
