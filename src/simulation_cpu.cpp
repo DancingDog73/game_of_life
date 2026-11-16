@@ -4,88 +4,9 @@
 #include <algorithm>
 #include <numeric>
 #include <string>
+#include "outils.hpp"
 
 
-void display(std::vector<int>& tab, int width){
-    fprintf(stdout, "\033[2J");
-    std::cout << "Nouvelle sim:\n";
-    int w_count = 1;
-    for(int a: tab){
-        std::cout << a; 
-        std::cout << " ";
-        if(w_count%width == 0){
-            std::cout << std::endl;
-        }
-        w_count++;
-    }
-    std::cout << "Appuyez sur une touche pour continuer\n";
-    std::cin.ignore();
-}
-
-int alive_cell(std::vector<int>& tab, int size){
-    return std::accumulate(tab.begin(), tab.end(), 1);
-}
-
-void fill_random(std::vector<int>& tab, int density){
-    int nb_ones = static_cast<float>(tab.size()*density)/100.0;
-    if(nb_ones > tab.size()){nb_ones = tab.size();}
-
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    
-    int ones_placed = 0;
-    while(ones_placed < nb_ones){
-        std::uniform_int_distribution<> distr(0, tab.size() - 1);
-        int r = distr(gen);
-
-        if (tab[r] == 0) {
-            tab[r] = 1;
-            ones_placed++;
-        }
-    }
-
-    
-}
-
-void add_random_blinker(std::vector<int>& tab, int height, int width){
-     if(height < 3 || width < 3){
-        return;
-    }
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_int_distribution<> distr(0, height - 3);
-    int l = distr(gen);
-    std::uniform_int_distribution<> distr1(1, width - 2);
-    int w = distr1(gen);
-
-
-    tab[l * width + (w)] = 1;
-    tab[(l+1) * width + (w)] = 1;
-    tab[(l+2) * width + (w)] = 1;
-
-
-}
-
-
-void add_random_glider(std::vector<int>& tab, int height, int width){
-    if(height < 3 || width < 3){
-        return;
-    }
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_int_distribution<> distr(0, height - 3);
-    int l = distr(gen);
-    std::uniform_int_distribution<> distr1(1, width - 2);
-    int w = distr1(gen);
-    
-    tab[l * width + (w)] = 1;
-    
-    
-    tab[(l+1)* width + (w+1)] = 1;
-    tab[(l+2)* width + (w-1)] = 1;
-    tab[(l+2)* width + (w)] = 1;
-    tab[(l+2)* width + (w+1)] = 1;
-}
 
 
 void simulation(int height, int width, int nb_simulations){
@@ -93,8 +14,8 @@ void simulation(int height, int width, int nb_simulations){
     std::vector<int> grille_actuelle = std::vector(nb_elt, 0);
     std::vector<int> grille_future = std::vector(nb_elt, 0);
 
-    fill_random(grille_actuelle, 10);
-    //add_random_glider(grille_actuelle, height, width);
+    //fill_random(grille_actuelle, 10);
+    add_random_glider(grille_actuelle, height, width);
 
     display(grille_actuelle, width);
 
