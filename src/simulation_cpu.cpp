@@ -22,8 +22,8 @@ void display(std::vector<int>& tab, int width){
     std::cin.ignore();
 }
 
-void fill_random(std::vector<int>& tab, int nb_ones){
-
+void fill_random(std::vector<int>& tab, int density){
+    int nb_ones = static_cast<float>(tab.size()*density)/100.0;
     if(nb_ones > tab.size()){nb_ones = tab.size();}
 
     std::random_device rd;
@@ -89,8 +89,8 @@ void simulation(int height, int width, int nb_simulations){
     std::vector<int> grille_actuelle = std::vector(nb_elt, 0);
     std::vector<int> grille_future = std::vector(nb_elt, 0);
 
-    //fill_random(grille_actuelle, nb_elt/2);
-    add_random_glider(grille_actuelle, height, width);
+    fill_random(grille_actuelle, 10);
+    //add_random_glider(grille_actuelle, height, width);
 
     display(grille_actuelle, width);
 

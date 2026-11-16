@@ -76,8 +76,8 @@ void fill_zero(int* tab, int size){
     }
 }
 
-void fill_random(int* tab, int size, int nb_ones){
-
+void fill_random(int* tab, int size, int density){
+    int nb_ones = static_cast<float>(size*density)/100.0;
     if(nb_ones > size){nb_ones = size;}
 
     std::random_device rd;
